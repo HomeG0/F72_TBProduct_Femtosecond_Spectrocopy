@@ -1,0 +1,98 @@
+[General Information]
+Function Name=Gauss_F72_TBP_06032024
+Brief Description=Amplitude version of Gaussian peak function
+Function Source=fgroup.GaussAmp
+Function Type=User-Defined
+Function Form=Equations
+Number Of Parameters=4
+Number Of Independent Variables=1
+Number Of Dependent Variables=1
+Analytical Derivatives for User-Defined=Off
+
+
+[Fitting Parameters]
+Naming Method=User-Defined
+Names=y0,xc,w,A
+Meanings=offset,center,width,amplitude
+Initial Values=
+Lower Bounds=--,--,0.0(X,ON),--
+Upper Bounds=--,--,--,--
+Number Of Significant Digits=
+
+
+[Formula]
+y=y0+A*exp(-2.7725887*((x-xc)/w)^2)
+
+
+[Constraints]
+
+
+
+[Constants]
+
+
+[Parameters Initialization]
+sort(x_y_curve);
+//smooth(x_y_curve, 2);
+
+double h = 0;
+xc = peak_pos(x_y_curve, &w, &y0, &A, &h);
+A = (h >= 0) ? abs(A) : -abs(A);
+w *= 0.5;
+A /= w * sqrt(2*pi);
+
+
+[Initializations]
+
+
+
+[After Fitting]
+
+
+
+[On Param Change]
+
+
+
+[Independent Variables]
+x=
+
+
+[Dependent Variables]
+y=
+
+
+[Controls]
+General Linear Constraints=Off
+Initialization Scripts=Off
+Scripts After Fitting=Off
+Number Of Duplicates=0
+Duplicate Offset=2
+Duplicate Unit=3
+Generate Curves After Fitting=Yes
+Curve Point Spacing=Uniform on X-Axis Scale
+Generate Peaks After Fitting=Yes
+Generate Peaks During Fitting=Yes
+Generate Peaks with Baseline=Yes
+Paste Parameters to Plot After Fitting=Yes
+Paste Parameters to Notes Window After Fitting=Yes
+Generate Residuals After Fitting=No
+Keep Parameters=No
+Enable Parameters Initialization=1
+Compile On Param Change Script=1
+
+
+[Compile Function]
+Compile=1
+Compile Parameters Initialization=1
+On Param Change Scripts Enabled=N/A
+
+
+[Origin C Function Header]
+
+
+
+[Origin C Parameter Initialization Header]
+
+
+
