@@ -6,10 +6,9 @@ A small Origin Labtalk based GUI snippet to help with analysis of files obtained
 
 ## Instructions:
 
-1) Download all the files in this repo and save it in a single folder.
-2) Replace _eg files with files obtained during F72 experiment.
-3) Open origin file (one with .opju extension)
-4) Rest intructions can be followed from with in the origin file.
+1) Download all the files in this repo by clicking on "Code" on top-right corner and then on "Download zip" and then extract the zip file into a single folder.
+2) Move the files obtained during the experiment into this new folder and open the Origin file  (one with .opju extension).
+4) Rest intructions can be followed from within the origin file.
 
 
 
