@@ -1,0 +1,528 @@
+[Main]
+//https://github.com/HomeGmail/F72-Experiment-FemtoGroup.git
+//Femto Group IPC,KIT
+//F72 Femtosecond Spectroscopy Time Bandwidth Product
+
+@GLOB=1;
+system.numeric.formulaSmartFuncArgSep=0; 
+system.numeric.scriptSmartFuncArgSep=1;
+system.numeric.separators=1;
+
+findFiles %X ext:=F72_FSSpec_TB_Product_script.ogs recursive:=1 fname:=acscript$; acscript$=acscript.Token(1,CRLF)$;
+run.section(%(acscript$),Funtions);
+run.section(%(acscript$),Names);
+
+if(exist(%(mln$))!=0){win -a %(mln$); QT1.script=0; win -cwd %(mln$);}
+doc -e O {win -cwd %H;};
+win -t l; win -r %H %(mln$); page.longname$=lmln$; page.title=0; 
+page -f; page.viewpaper=1; @LWP=1;
+femtoicon();
+
+defto=1; txtp();
+scr=10; bg=2; fs=27; txt(H,17,-12,\b(Experiment F72:)\n\b(Autocorrelation Constant), "if (exist(%(tmln$))==0){win -i %(mln$);};");
+b1imf$=<[<findFiles %X ext:=F72_FSSpec_TB_Product_script.ogs recursive:=1 fname:=acscript$; acscript$=acscript.Token(1,CRLF)$; run.section(%(acscript$),Import Files);>]>;
+scr=1; fs=25; bg=2; anc=8; txt(B1,101,-14,\b((1))   Import Files,b1imf$);
+b2pd$=<[<findFiles %X ext:=F72_FSSpec_TB_Product_script.ogs recursive:=1 fname:=acscript$; acscript$=acscript.Token(1,CRLF)$; run.section(%(acscript$),Process Data);>]>;
+scr=1; fs=25; bg=2; anc=8; txt(B2,101,-32,\b((2))   Process Data, b2pd$); B2.script=0; B2.mouse=0;
+b3cf$=<[<findFiles %X ext:=F72_FSSpec_TB_Product_script.ogs recursive:=1 fname:=acscript$; acscript$=acscript.Token(1,CRLF)$; run.section(%(acscript$),Curve Fitting);>]>;
+scr=1; fs=25; bg=2; anc=8; txt(B3,101,-50,\b((3))  CurveFit Data, b3cf$);B3.script=0; B3.mouse=0;
+b4vd$=<[<findFiles %X ext:=F72_FSSpec_TB_Product_script.ogs recursive:=1 fname:=acscript$; acscript$=acscript.Token(1,CRLF)$; run.section(%(acscript$),Plot Graphs);>]>;
+scr=1; fs=25; bg=2; anc=8; txt(B4,101,-68,\b((4)) Visualise Data,b4vd$ );B4.script=0; B4.mouse=0;
+
+fs=fs+2; bg=0; al=0; anc=2; txt(L1,13,-30,Import the Files by\nclicking on \b("Import Files"));
+fs=fs+2; anc=2; al=0; txt(L11,5,-30,\b(1));
+
+scr=9; bg=0; fs=2; txt(ENT,0,0,X,"if (QT1.script!=8){QT1.script=8;}"); 
+bg=0; scr=1; txt(EXI,100,0,Close, "QT1.script=0; doc -s; exit;");
+
+
+qt1s$=<[<win -a %H; mln$=%H; win -i %H; doc -e O {win -cwd %H;}; win -r %(mln$) %(tmln$); findFiles %X ext:=F72_FSSpec_TB_Product_script.ogs recursive:=1 fname:=acscript$; acscript$=acscript.Token(1,CRLF)$; run.section(%(acscript$),Main); >]>;
+fs=fs+1; bg=0; scr=8; anc=3; txt(QT1,1,-98,\b(Quick Tip:) You can use \b(Quick Analysis) button to skip this steps!, qt1s$);
+
+rsts$=<[<win -i %H; doc -e O {win -cwd %H;}; win -r %(mln$) %(tmln$); findFiles %X ext:=F72_FSSpec_TB_Product_script.ogs recursive:=1 fname:=acscript$; acscript$=acscript.Token(1,CRLF)$; run.section(%(acscript$),Main); win -a %(tmln$); QT1.script=0; win -cwd %H;>]>;
+scr=1; fs=fs-1; bg=0; txt(RST,90,0,Reset,rsts$);
+
+qas$=<[<findFiles %X ext:=F72_FSSpec_TB_Product_script.ogs recursive:=1 fname:=acscript$; acscript$=acscript.Token(1,CRLF)$; run.section(%(acscript$),Import Files);run.section(%(acscript$),Process Data);run.section(%(acscript$),Curve Fitting);run.section(%(acscript$),Plot Graphs);>]>;
+scr=1; fs=fs-1; bg=0; txt(QR,74,0,Quick Analysis,qas$);
+
+oscs$=<[<findFiles %X ext:=F72_FSSpec_TB_Product_script.ogs recursive:=1 fname:=acscript$; acscript$=acscript.Token(1,CRLF)$; ed.open(%(acscript$));>]>;
+anc=8; fs=fs-4; scr=1; bg=0; txt(Sc,100,-102.5,Open Script,oscs$);
+scr=1; fs=fs-4; bg=0; txt(Git,80,-102.5,Github, win -aw "https://github.com/HomeG0/F72_TBProduct_Femtosecond_Spectrocopy.git");
+
+fs=fs; bg=0; txt(Warn1,30,2.5,"\c2(\b(ATTENTION!:)) \b(Use 'Close' button to exit origin.)");
+
+@GLOB=0;
+
+
+
+
+[Names]
+@GLOB=1;
+findFiles %X ext:=F72_FSSpec_TB_Product_script.ogs recursive:=1 fname:=acscript$; acscript$=acscript.Token(1,CRLF)$;
+findFiles %X ext:=FemtoIco.jpg recursive:=1 fname:=femtoico$; femtoico$=femtoico.Token(1,CRLF)$;
+findFiles %X ext:=Gauss_F72_TBP_06032024.fdf recursive:=1 fname:=fgh$; fgh$=fgh.Token(1,CRLF)$;
+findFiles %X ext:=Sech2_F72_TBP_06032024.fdf recursive:=1 fname:=fs2$; fs2$=fs2.Token(1,CRLF)$;
+mln$="F72AC"; lmln$="Main Layout Window;";
+sbn$="W11SD"; lsbn$="Emmision Spectra Data";
+abn$="W21AD"; labn$="Intensity Autocorrelation Data";
+sgn$="W12SG"; lsgn$="Emission Spectra Graph";
+agn$="W22AG"; lagn$="Intensity Autocorrelation Graph";
+sln$="W13SP"; lsln$="Emission Spectra Fitting Parameters";
+aln$="W23AP"; laln$="Intensity Autocorrelation Fitting Parameters";
+tmln$="F72ACT";
+@GLOB=0;
+
+
+
+
+
+
+
+
+[Funtions]
+@GLOB=1;
+function femtoicon(){
+	findFiles %X ext:=FemtoIco.jpg recursive:=1 fname:=femtoico$; femtoico$=femtoico.Token(1,CRLF)$;
+	image.FileName$=femtoico$; image.import.Object(%H,FIco);
+	FIco.width=0.09*page.width; FIco.height=FIco.width;
+	iprx10=FIco.width/page.width*10; ipry10=FIco.height/page.height*10;
+	FIco.y=3*ipry10/5; FIco.x=10-fico.y*page.height/page.width;
+	FIco.mouse=0; FIco.dbclick=0;
+}
+
+
+function txtp(){
+	@GLOB=1;
+	double scf=1;
+	double fs=25; 
+	double bg=1;
+	double al=1;
+	double sel=0; 
+	double anc=5;
+	double mar=30; 
+	double scr=0;
+	double lat=0;
+	if (exist(defto)==0){defto=1;};
+	if (defto==1){ dataset wrto={0,0}; }; if (exist(wrto)==0) {dataset wrto={0,0};};
+}
+txtp();
+
+function txt(string nam$,double posx, double posy,string txtl$,string scri$="NaN"){
+	label -r %(nam$); 
+	if (scr==1){if(bg==1){bg=3;}; sel=1;}
+	double px=scf*posx+wrto[1]; double py=-scf*posy+wrto[2];
+	if (lat==0){
+		label -n %(nam$) "."; %(nam$).anchor=anc;
+		label -s -sa -p px py -b bg -n %(nam$) %(txtl$);
+		%(nam$).font=font("Consolas"); 
+		%(nam$).fsize=fs; %(nam$).halign=al;
+		%(nam$).margin.left=mar; %(nam$).margin.right=mar; %(nam$).margin.top=mar; %(nam$).margin.bottom=mar;
+		%(nam$).script=scr; %(nam$).script.text$=%(scri$); %(nam$).attach=1;
+		%(nam$).hmove=0; %(nam$).vmove=0; %(nam$).dbclick=sel;
+		%(nam$).mouse=sel;
+	} else {
+		label -latex txtl$; LaTex.name$=%(nam$); %(nam$).attach=1;
+		if (anc==1){
+			%(nam$).left=(px/100)*page.width;
+			%(nam$).top=(py/100)*page.height;
+		} else {
+				%(nam$).left=(px/100)*page.width-%(nam$).width/2;  
+				%(nam$).top=(py/100)*page.height-%(nam$).height/2;
+		}
+		%(nam$).hmove=0; %(nam$).vmove=0; 
+		%(nam$).dbclick=sel; %(nam$).mouse=sel;
+	}
+	txtp(); 
+}
+
+
+function tabl(string namt$, double postx, double posty, string tab$,spx=20,spy=20){
+	ac_orig=wrto; ac_defto=defto;
+	tr=tab.getnumtokens(|); _row1$=tab.token(1,|)$; tc=_row1.getnumtokens(;);
+	tscf=scf; tsel=sel; tmar=mar; tfs=fs; tanc=anc; tbg=bg; tal=al;
+	defto=0; @GLOB=1; wrto[1]=scf*(postx+wrto[1]-spx*(tc-1)/2); wrto[2]=-scf*(posty+wrto[2]+spy*(tr-1)/2);@GLOB=0;
+	loop(ii,0,tr-1){%A=tab.token(ii+1,|)$; 
+		loop(jj,0,tc-1){namij$=%(namt$)$(ii)$(jj);
+			@GlOB=1;defto=0;@GLOB=0; sel=tsel; mar=tmar; fs=tfs; al=tal; scf=tscf; anc=tanc; bg=tbg;
+			txt(namij$,jj*scf*spx,-ii*scf*spy,%[%A,#(jj+1),;]);
+		}
+	}
+	wrto=ac_orig; @GlOB=1;defto=ac_defto;@GLOB=0;
+}
+
+@GLOB=0;
+
+
+
+
+
+[Import Files]
+@GLOB=1;
+findFiles %X ext:=F72_FSSpec_TB_Product_script.ogs recursive:=1 fname:=acscript$; acscript$=acscript.Token(1,CRLF)$;
+run.section(%(acscript$),Funtions);
+run.section(%(acscript$),Names);
+c=299792458.0; 
+sbn$="W11SD"; lsbn$="Emmision Spectra Data";
+abn$="W21AD"; labn$="Intensity Autocorrelation Data";
+impf=1;
+@GLOB=1;
+findFiles %X ext:=tisa*.txt recursive:=1 fname:=tsp$; ts$=tsp.Token(1,CRLF)$;
+findFiles %X ext:=dark*.txt recursive:=1 fname:=dsp$; ds$=dsp.Token(1,CRLF)$;
+findFiles %X ext:=acf*.* recursive:=1 fname:=acp$; ac$=acp.Token(1,CRLF)$;
+
+if (ts.len()<=2){ts$=%XF72_OriginLab_Script_Files\eg_files\zzz_tisaspec_eg_file.txt;}; 
+if (ds.len()<=2){ds$=%XF72_OriginLab_Script_Files\eg_files\zzz_darkspec_eg_file.txt;}; 
+if (ac.len()<=2){ac$=%XF72_OriginLab_Script_Files\eg_files\zzz_acf_eg_file;};
+sb=1; ab=1; 
+if (exist(%(sbn$))==2){sb=0;}
+if (exist(%(abn$))==2){ab=0;}
+
+getn
+(Spectrum Files) sb:2s2
+(Emission Spectra) ts$:@BBFile
+(Dark Spectra) ds$:@BBFile
+(Intensity autocorrelation File) ab:2s1
+(Autocorrelation file) ac$:@BBFile
+(Import F72 related files);
+///////////////////////////////////////////////////////////////////////////////
+
+if (sb==1){
+	if (exist(%(sbn$))!=0){win -cwd %(sbn$);}
+	if (file.exist(%(ts$))==0){type -b "Emission Spectrum file not found at '%(ts$)'"};
+	if (file.exist(%(ds$))==0){type -b "Dark Spectrum file not found at '%(ds$)'"};
+	impASC ts$ Options.FirstMode:=1 Options.FileStruct.NumSep:=1;
+	impASC ds$ Options.FirstMode:=1 Options.FileStruct.NumSep:=1 Options.Partials.partial_cols.FirstCol:=2;
+	win -r %H %(sbn$); page.longname$ = %(lsbn$); page.title = 1; wks.name$ = %(sbn$);
+	wks.labels(LU); wks.FONT=font("Consolas");
+	
+	col(1)=col(1)/100; col(1)[L]$="Wavlength"; wks.col1.unit$=\q(nm);
+	@GLOB=1; //swl_err=(mean(diff(col(1)))/2)*10^-9; // m
+	swl_err=3*10^-9/2; //m
+	@GLOB=0;
+	col(2)=col(2)/100; col(2)[L]$="Emission Intensity"; wks.col2.unit$=\q(V);
+	col(3)=col(3)/100; col(3)[L]$="Dark Intensity"; wks.col3.unit$=\q(V);
+	wks.col=2; wks.insert(); wks.col2.type=2; wks.col2.width=2;	
+	@GLOB=1; prds=0; @GLOB=0;
+	
+	if (exist(%(sgn$))!=0){win -cwd %(sgn$);} if (exist(%(sln$))!=0){win -cwd %(sln$);}
+}
+//////
+
+if (ab==1){
+	if (exist(%(abn$))!=0){win -cwd %(abn$)}; 
+	if (file.exist(%(ac$))==0){type -b "Autocorrelation file not found at '%(ac$)'"};
+	impASC ac$ Options.FirstMode:=3 Options.Partials.partial_cols.LastCol:=2 Options.FileStruct.NumSep:=1;
+	win -r %H %(abn$); page.longname$ = %(labn$); page.title = 1; wks.name$ = %(abn$); 
+	wks.labels(LU); wks.FONT=font("Consolas");
+	
+	col(1)[L]$="Distance of Translation Stage"; wks.col1.unit$=\q({\mu}m);
+	col(2)[L]$="Interference Intensity"; wks.col2.unit$=\q(V);
+	wks.col=2; wks.insert(); wks.col2.type=2; wks.col2.width=2;
+	@GLOB=1; prda=0; @GLOB=0;
+	
+	if (exist(%(agn$))!=0){win -cwd %(agn$);} if (exist(%(aln$))!=0){win -cwd %(aln$);}
+}
+winarrange order:=2 col:=3;
+win -a %(mln$); H.script=10;
+if (exist(sbn$)*exist(abn$)!=0){
+	L11.bordercolor=3; QT1.text$=\b(Status:) Files imported sucessfully!...;
+	fs=fs+2; bg=0; al=0; anc=2; txt(L112,13,-47,"Now, we will process the data for further\nanalysis. Click on \b("Process Data")");
+	fs=fs+2; anc=2; al=0; txt(L1122,5,-47,\b(2)); label -ra L11223;
+	QR.show=0;  B1.script=0; B2.script=1; B2.mouse=1; B1.mouse=0;
+}
+
+
+
+
+
+
+
+
+[Process Data]
+@GLOB=1;
+if (exist(sbn$)*exist(abn$)!=4){
+type -b "Please import files first..."; impf=0;}
+
+if (impf!=0){
+	if (prds==0){
+		win -a %(sbn$);
+		wks.col5.formula$=col(3)-col(4); col(5)[L]$="Baseline corrected Intensity"; wks.col5.unit$=\q(V);
+		wks.col=2; wks.insert(); wks.insert();
+		wks.col2.formula$=1/(col(1)*10^(-7)); col(2)[L]$="Wave Number"; wks.col2.unit$=\q(cm^{-1});
+		wks.col3.formula$=c/(col(1)*10^(-9))/10^12; col(3)[L]$="Frequency"; wks.col3.unit$=\q(Hz);
+		wks.col8.formula$=(col(7)-min(col(7)))/(max(col(7))-min(col(7))); col(8)[L]$="Normalised data"; wks.col8.unit$=\q(V);
+		wks.col2.type=4; wks.col2.width=7; wks.col2.DIGITmode=2;
+		wks.col3.type=4; wks.col3.width=7; wks.col3.DIGITmode=1;
+		wks.col4.width=2;
+		@GLOB=1; prds=1; @GLOB=0; 
+	}
+
+	if (prda==0){
+		win -a %(abn$);
+		int i=list(max(col(3)),col(3)); 
+		wks.col=2; wks.insert(); wks.insert();
+		wks.col4.type=2;
+		wks.col2.formula$=col(1)-col(1)[$(i)]; col(2)[L]$="Relative Displacement"; wks.col2.unit$=\q({\mu}m);
+		wks.col3.formula$=(2*col(2)/c)*10^9; col(3)[L]$="Time Delay"; wks.col3.unit$=\q(fs);
+		@glob=1; atd_err=mean(diff(col(3)))/2; //fs
+		@GLOB=0;
+		wks.col6.formula$=(col(5)-min(col(5)))/(max(col(5))-min(col(5))); col(6)[L]$="Normalised data"; wks.col6.unit$=\q(V);
+		wks.col2.type=4; wks.col3.type=4;
+		wks.col2.width=7; wks.col3.width=7; wks.col4.width=2;
+		@GLOB=1; prda=1; @GLOB=0;
+	}
+	
+	@GLOB=1; procf=1; cfit=0; @GLOB=0;
+	win -a %(mln$);
+	if (prds*prda==1){L1122.bordercolor=3; QT1.text$=\b(Status:) Data processed sucessfully!...;
+		bg=0; al=0; anc=2; txt(L11223,13,-64,"Now, we can fit suitable profiles on our\ndata. Click on \b(Curvefit Data) to proceed.");
+		fs=fs+2; anc=2; al=0; txt(L112233,5,-64,\b(3)); label -ra L1122334;
+		B2.script=0; B3.script=1; B3.mouse=1; B2.mouse=0;
+	}
+
+}
+
+winarrange order:=2 col:=3;
+win -a %(mln$);  H.script=10;
+
+
+
+[Curve Fitting]
+@GLOB=1;
+if (exist(sbn$)*exist(abn$)!=4){type -b "Please import files first..."; impf=0;}
+if (prds*prda!=1){type -b "Please process the data..."; procf=0;}
+
+if (impf*procf==1){
+	findFiles %X ext:=Gauss_F72_TBP_06032024.fdf recursive:=1 fname:=fgh$; fgh$=fgh.Token(1,CRLF)$;
+	findFiles %X ext:=Sech2_F72_TBP_06032024.fdf recursive:=1 fname:=fs2$; fs2$=fs2.Token(1,CRLF)$;
+	nlsf.deletecategory(F72_TBP);
+	nlsf.addfunc(F72_TBP, %(fgh$),0); nlsf.addfunc(F72_TBP, %(fs2$),0);
+	
+	win -a %(sbn$);
+
+	nlbegin iy:=(3,8) func:="Gauss_F72_TBP_06032024" nltree:=sgpn;
+	nlfit; col(10)=fit(col(3)); nlend; 
+	col(10)[L]$="Gaussian Fit"; wks.col10.unit$=\q(V);
+	@GLOB=1; sgfiteq_f$="\Large \mathcal{I(\omega)}=\mathcal{I_{\small off}}+\mathcal{I_{\small 0}}\cdot e^{-4\ln2\left(\frac{\omega-\omega_c}{\Delta\omega_{\tiny\frac{1}{2}}}\right)^2}"; @GLOB=0;
+	@GLOB=1; sgfiteq_n$="\Large \mathcal{I(\nu)}=\mathcal{I_{\small off}}+\mathcal{I_{\small 0}}\cdot e^{-4\ln2\left(\frac{\nu-\nu_c}{\Delta\nu_{\tiny\frac{1}{2}}}\right)^2}"; @GLOB=0;
+
+	nlbegin iy:=(3,8) func:="Sech2_F72_TBP_06032024" nltree:=sspn;
+	nlfit; col(11)=fit(col(3)); nlend; 
+	col(11)[L]$="Sech\+(2) Fit"; wks.col11.unit$=\q(V);
+	@GLOB=1; ssfiteq_f$="\mathcal{I(\omega)}=\mathcal{I_{\small off}}+\mathcal{I_{\small 0}}\cdot sech^2\left({1.762\left(\frac{\omega-\omega_c}{\Delta\omega_{\frac{1}{2}}}\right)}\right)"; @GLOB=0;
+	@GLOB=1; ssfiteq_n$="\mathcal{I(\nu)}=\mathcal{I_{\small off}}+\mathcal{I_{\small 0}}\cdot sech^2\left({1.762\left(\frac{\nu-\nu_c}{\Delta\nu_{\frac{1}{2}}}\right)}\right)"; @GLOB=0;
+
+	wks.col9.type=2; wks.col9.width=2;
+	
+	@GLOB=1; 
+	tree sgp_f=sgpn; tree ssp_f=sspn;
+	tree sgp_n=sgpn; tree ssp_n=sspn;
+	
+	sgp_f.w=sgpn.w;
+	sgp_f.e_w=((sgpn.xc-sgpn.w/2)^2+(sgpn.xc+sgpn.w/2)^2)*swl_err/c+sgpn.e_w;
+	sgp_n.w=sgp_f.w*10^12/c/10^2; sgp_n.e_w=sgp_f.e_w*10^12/c/10^2;
+	sgp_n.xc=sgp_f.xc*10^12/c/10^2; sgp_n.e_xc=sgp_f.e_xc*10^12/c/10^2; 
+	
+	ssp_f.e_w=((sspn.xc-sspn.w/2)^2+(sspn.xc+sspn.w/2)^2)*swl_err/c+sspn.e_w;
+	ssp_n.w=ssp_f.w*10^12/c/10^2; ssp_n.e_w=ssp_f.e_w*10^12/c/10^2;
+	ssp_n.xc=ssp_f.xc*10^12/c/10^2; ssp_n.e_xc=ssp_f.e_xc*10^12/c/10^2; 
+	
+	sgpt_f$=<[<\t\p1();\b(Value);\b(Error)|\b(Amplitude) \p80(\q(I_{0} (V)));$(sgp_f.A,.4,);$(sgp_f.e_A,.4,)|\b(Central Freq.) \p80(\q(\omega_c \ (THz))); $(sgp_f.xc,.2,); $(sgp_f.e_xc,.2,)|\b(Width) \p80(\q(\Delta\omega_{1/2} \ (THz)));$(sgp_f.w,.4,);$(sgp_f.e_w,.4,),|\b(Offset) \p80(\q(I_{off} (V)));$(sgp_f.y0,.4,);$(sgp_f.e_y0,.4,)>]>;
+	sgpt_n$=<[<\t\p1();\b(Value);\b(Error)|\b(Amplitude) \p80(\q(I_{0} (V)));$(sgp_n.A,.4,);$(sgp_n.e_A,.4,)|\b(Central Freq.) \p80(\q(\\nu_c \ (cm^{-1}))); $(sgp_n.xc,.2,); $(sgp_n.e_xc,.2,)|\b(Width) \p80(\q(\Delta\\nu_{1/2} \ cm^{-1}));$(sgp_n.w,.2,);$(sgp_n.e_w,.2,),|\b(Offset) \p80(\q(I_{off} (V)));$(sgp_n.y0,.4,);$(sgp_n.e_y0,.4,)>]>;
+	
+	sspt_f$=<[<\t\p1();\b(Value);\b(Error)|\b(Amplitude) \p80(\q(I_{0} (V)));$(ssp_f.A,.4,);$(ssp_f.e_A,.4,)|\b(Central Freq.) \p80(\q(\omega_c \ (THz))); $(ssp_f.xc,.2,);$(ssp_f.e_xc,.2,)|\b(Width) \p80(\q(\Delta\omega_{1/2} \ (THz)));$(ssp_f.w,.4,);$(ssp_f.e_w,.4,),|\b(Offset) \p80(\q(I_{off} (V)));$(ssp_f.y0,.4,);$(ssp_f.e_y0,.4,)>]>;
+	sspt_n$=<[<\t\p1();\b(Value);\b(Error)|\b(Amplitude) \p80(\q(I_{0} (V)));$(ssp_n.A,.4,);$(ssp_n.e_A,.4,)|\b(Central Freq.) \p80(\q(\\nu_c \ (cm^{-1}))); $(ssp_n.xc,.2,);$(ssp_n.e_xc,.2,)|\b(Width) \p80(\q(\Delta\\nu_{1/2} \ cm^{-1}));$(ssp_n.w,.2,);$(ssp_n.e_w,.2,),|\b(Offset) \p80(\q(I_{off} (V)));$(ssp_n.y0,.4,);$(ssp_n.e_y0,.4,)>]>;
+
+	sgptfwhm_f$="\boxed{\large \Delta \omega_{\small \frac{1}{2}}^{P_{gaussian}}=$(sgp_f.w,.3,)\pm $(sgp_f.e_w,.3,)\ \ THz}";
+	sgptfwhm_n$="\boxed{\large \Delta \nu_{\small \frac{1}{2}}^{P_{gaussian}}=$(sgp_n.w,.3,)\pm $(sgp_n.e_w,.3,)\ \ cm^{-1}}";	
+
+	ssptfwhm_f$="\boxed{\large \Delta \omega_{\small \frac{1}{2}}^{P_{sech^{2}}}=$(ssp_f.w,.3,)\pm $(ssp_f.e_w,.3,)\ \ THz}";
+	ssptfwhm_n$="\boxed{\large \Delta \nu_{\small \frac{1}{2}}^{P_{sech^{2}}}=$(ssp_n.w,.3,)\pm $(ssp_n.e_w,.3,)\ \ cm^{-1}}";	
+	
+	@GLOB=0;
+	//////////////////////////////////////
+
+
+	win -a %(abn$);
+
+	nlbegin iy:=(3,6) func:="Gauss_F72_TBP_06032024" nltree:=agpn;
+	nlfit; col(8)=fit(col(3)); nlend; 
+	col(8)[L]$="Gaussian Fit"; col(8)[U]$="V";
+	@GLOB=1; agfiteq$="\Large \mathcal{A^{\left( 2\right)}}\left( \tau \right)=\mathcal{I_{\small off}}+\mathcal{A_{\small 0}}\cdot e^{-4\ln2\left(\frac{\tau-\tau_c}{\delta\tau_{\tiny\frac{1}{2}}}\right)^2}"; @GLOB=0;
+
+	nlbegin iy:=(3,6) func:="Sech2_F72_TBP_06032024" nltree:=aspn;
+	nlfit; col(9)=fit(col(3)); nlend; 
+	col(9)[L]$="Sech\+(2) Fit"; col(9)[U]$="V";
+	@GLOB=1; asfiteq$="\mathcal{A^{\left( 2\right)}}\left( \tau \right)=\mathcal{I_{\small off}}+\mathcal{A_{\small 0}}\cdot sech^2\left({1.762\left(\frac{\tau-\tau_c}{\delta\tau_{\frac{1}{2}}}\right)}\right)"; @GLOB=0;
+
+	wks.col7.type=2; wks.col7.width=2;
+	
+	@GLOB=1;
+	tree agp=agpn; tree asp=aspn;
+	agp_fwhm_err=atd_err*2+agp.e_w;
+	asp_fwhm_err=atd_err*2+asp.e_w;
+	agpt$=<[<\t\p1();\b(Value);\b(Error)|\b(Amplitude) \p80(\q(A_{0} (V)));$(agp.A,.4,);$(agp.e_A,.4,)|\b(Ref. Time) \p80(\q(\\tau_c \ (fs)));$(agp.xc,.4,);$(atd_err+agp.e_xc,.4,)|\b(Width) \p80(\q(\\tau_{1/2} \ (fs)));$(agp.w,.2,);$(agp_fwhm_err,.2,),|\b(Offset) \p80(\q(A_{off} (V)));$(agp.y0,.4,);$(agp.e_y0,.4,)>]> ;
+	aspt$=<[<\t\p1();\b(Value);\b(Error)|\b(Amplitude) \p80(\q(A_{0} (V)));$(asp.A,.4,);$(asp.e_A,.4,)|\b(Ref. Time) \p80(\q(\\tau_c \ (fs)));$(asp.xc,.4,);$(atd_err+asp.e_xc,.4,)|\b(Width) \p80(\q(\\tau_{1/2} \ (fs)));$(asp.w,.2,);$(asp_fwhm_err,.2,),|\b(Offset) \p80(\q(A_{off} (V)));$(asp.y0,.4,);$(asp.e_y0,.4,)>]> ;
+	agptfwhm$="\boxed{\large \Delta t_{\small \frac{1}{2}}^{P_{gaussian}}=\frac{\delta\tau_{\small \frac{1}{2}}^{AC_{gaussian}}}{\sqrt{2}}=$(agp.w/sqrt(2),.3,)\pm $(agp_fwhm_err/sqrt(2),.3,)\ \ fs}";
+	asptfwhm$="\boxed{\large \Delta t_{\small \frac{1}{2}}^{P_{sech^{2}}}=\frac{\delta\tau_{\small \frac{1}{2}}^{AC_{sech^{2}}}}{1.54}=$(asp.w/1.54,.3,)\pm $(asp_fwhm_err/1.54,.3,)\ \ fs}";
+	
+	cfit=1; 
+	
+	tkgp=0.441; kgp=(sgp_f.w*10^12*agp.w*10^-15/sqrt(2)); ekgp=kgp*(sgp_f.e_w/sgp_f.w+agp_fwhm_err/agp.w/sqrt(2));
+	tksp=0.315; ksp=(ssp_f.w*10^12*asp.w*10^-15/1.54); eksp=ksp*(ssp_f.e_w/ssp_f.w+asp_fwhm_err/asp.w/1.54);
+	rkgp=(kgp-tkgp)/tkgp; rksp=(ksp-tksp)/tksp;
+	if (rkgp<rksp){
+		pprof$= Gaussian;
+		ktabl$="\boxed{\begin{matrix} & Gaussian & sech^2\\&&\\ \Delta\omega_{\frac{1}{2}}\ (THz) & $(sgp_f.w,.3,) \pm $(sgp_f.e_w,.3,) & $(ssp_f.w,.3,) \pm $(ssp_f.e_w,.3,)  \\\Delta t_{\frac{1}{2}}\ \small(fs) & $(agp.w/sqrt(2),.3,) \pm $(agp_fwhm_err/sqrt(2),.3,) & $(asp.w/1.54,.3,)\pm $(asp_fwhm_err/1.54,.3,)\\K \ (=\Delta\omega_{\frac{1}{2}}\cdot\Delta t_{\frac{1}{2}}) & \color{green}{\boxed{$(kgp,.3,) \pm $(ekgp,.3,)}}& \color{red}{\boxed{$(ksp,.3,) \pm $(eksp,.3,)}}\\ K^{theoretical} & $(tkgp) & $(tksp) \\ Rel. Diff.(=\frac{\Delta K}{K^{theo.}}) & \color{green}{$(rkgp,.3,)} & \color{red}{$(rksp,.3,) }\end{matrix}}";
+		} 
+	else {
+		pprof$= sech\+(2);
+		ktabl$="\boxed{\begin{matrix} & Gaussian & sech^2\\&&\\ \Delta\omega_{\frac{1}{2}}\ (THz) & $(sgp_f.w,.3,) \pm $(sgp_f.e_w,.3,) & $(ssp_f.w,.3,) \pm $(ssp_f.e_w,.3,)  \\\Delta t_{\frac{1}{2}}\ \small(fs) & $(agp.w/sqrt(2),.3,) \pm $(agp_fwhm_err/sqrt(2),.3,) & $(asp.w/1.54,.3,)\pm $(asp_fwhm_err/1.54,.3,)\\K \ (=\Delta\omega_{\frac{1}{2}}\cdot\Delta t_{\frac{1}{2}}) & \color{red}{\boxed{$(kgp,.3,) \pm $(ekgp,.3,)}}&\color{green}{\boxed{$(ksp,.3,) \pm $(eksp,.3,)}}\\ K^{theoretical} & $(tkgp) & $(tksp) \\ Rel. Diff.(=\frac{\Delta K}{K^{theo.}}) & \color{red}{$((rkgp,.3,)} & \color{green}{$(rksp,.3,) }\end{matrix}}";
+	}; 
+	if (rksp==rkgb){
+		pprof$=either Gaussian or sech\+2;
+		ktabl$="\boxed{\begin{matrix} & Gaussian & sech^2\\&&\\ \Delta\omega_{\frac{1}{2}}\ (THz) & $(sgp_f.w,.3,) \pm $(sgp_f.e_w,.3,) & $(ssp_f.w,.3,) \pm $(ssp_f.e_w,.3,)  \\\Delta t_{\frac{1}{2}}\ \small(fs) & $(agp.w/sqrt(2),.3,) \pm $(agp_fwhm_err/sqrt(2),.3,) & $(asp.w/1.54,.3,)\pm $(asp_fwhm_err/1.54,.3,)\\K \ (=\Delta\omega_{\frac{1}{2}}\cdot\Delta t_{\frac{1}{2}}) & \color{gray}{\boxed{$(kgp,.3,) \pm $(ekgp,.3,)}}&\color{gray}{\boxed{$(ksp,.3,) \pm $(eksp,.3,)}}\\ K^{theoretical} & $(tkgp) & $(tksp) \\ Rel. Diff.(=\frac{\Delta K}{K^{theo.}}) & \color{gray}{$(rkgp,.3,)} & \color{gray}{$(rksp,.3,) }\end{matrix}}";
+	};
+	
+	@GLOB=0;
+	winarrange order:=2 col:=3;
+	
+	
+	
+	nlsf.deletecategory(F72_TBP);
+	win -a %(mln$);
+	
+	if (cfit==1) {L112233.bordercolor=3; QT1.text$=\b(Status:) Curve fitting done sucessfully!...;
+		bg=0; al=0; anc=2; txt(L1122334,13,-81,"Now, we can visualise the data and see\nthe results. Click on \b(Visualise Data)");
+		fs=fs+2; anc=2; al=0; txt(L11223344,5,-81,\b(4));
+		B3.script=0; B4.script=1; B4.mouse=1; B3.mouse=0;
+	}
+}
+
+
+win -a %(mln$);
+
+
+
+[Plot Graphs]
+if (exist(sbn$)*exist(abn$)!=4){
+	type -b "Please import files first..."; impf=0;}
+if (prds*prda!=1 && impf!=0){
+	type -b "Please process the data..."; procf=0;}
+if (cfit!=1 && procf*impf!=0){
+	type -b "Please do the curve fitting first..."; cfit=0;}
+
+if (impf*procf*cfit==1){
+	@GLOB=1; 
+	sgn$="W12SG"; lsgn$="Emission Spectra Graph";
+	agn$="W22AG"; lagn$="Intensity Autocorrelation Graph";
+
+	function gr_set(){
+		legend.background=1; legend.smartpos=1;
+		legend.FONT=font("Consolas"); legend.background=1;
+		legend -tt; Legend.fsize=25;
+		layer.x.grid.show=3;
+		layer.x.grid.majorwidth=2; layer.x.grid.majorcolor=20;
+		layer.x.grid.minorwidth=0.5; layer.x.grid.minortype=1; layer.x.grid.minorcolor=19;
+		layer.x.minorticks=4; layer.x.label.fsize=25;
+		layer.x.tickthickness=3; layer.x.mtickthickness=2; layer.x.ticklength=8; layer.x.mticklength=-5;
+		
+		layer.y.from=-0.05; layer.y.to=1.05;
+		layer.y.firsttick=0; layer.y.inc=0.25;
+		layer.y.grid.show=3;
+		layer.y.grid.majorwidth=2; layer.y.grid.majorcolor=20;
+		layer.y.grid.minorwidth=0.5; layer.y.grid.minortype=1; layer.y.grid.minorcolor=19;
+		layer.y.minorticks=4;
+		layer.showframe=1; layer.y.label.fsize=25;
+		layer.y.tickthickness=3; layer.y.mtickthickness=2; layer.y.ticklength=8; layer.y.mticklength=-5;
+	}
+
+	function params(string namg$,string scrg$, string nams$,string scrs$){
+		defto=1;
+		fs=fs+3; bg=2; anc=2; txt(H,-0.5,-14,"Fitting\nParameters:");
+		scr=1; fs=fs; anc=8; txt(namg$,101,-8,"Gaussian Curve",scrg$); %(namg$).background=2;
+		scr=1; fs=fs; anc=8; txt(nams$,101,-22,"sech\+(2) Curve",scrs$); %(nams$).background=2;
+	}
+	@GLOB=0;
+	
+	///////////////////////////////////////////////////////////
+
+	sg_r={sgp_f.xc-2*sgp_f.w,sgp_f.xc+2*sgp_f.w};
+	if (exist(%(sgn$))!=0){win -cwd %(sgn$);}
+	win -t plot; win -r %H %(sgn$); page.longname$=lsgn$; page.title=1;
+	plotxy [%(sbn$)]1!((3,10)) ogl:=[%(sgn$)]1!; set W11SD_J -k 0; set W11SD_J -l 1; set W11SD_J -wp 3; set W11SD_J -c 2;
+	plotxy [%(sbn$)]1!((3,11)) ogl:=[%(sgn$)]1!; set W11SD_K -k 0; set W11SD_K -l 1; set W11SD_K -wp 3; set W11SD_K -c 4;
+	plotxy [%(sbn$)]1!((3,8)) ogl:=[%(sgn$)]1!; set W11SD_H -k 7; set W11SD_H -z 10; set W11SD_H -kh 50; set W11SD_H -l 0; 
+	layer.title=1; fs=30; bg=0;txt(_title,50,23,\q(Emission\ Spectra));
+	xb.TEXT$="\q(Frequency\ (\omega)\ THz)"; yl.TEXT$="\q(Normalised\ Intensity\ /\ V)";
+	layer.x.from=sg_r[1]; layer.x2.to=sg_r[2]; layer.x.majorticks=6;
+	layer.x.firsttick=(sg_r[1]-mod(sg_r[1],10))+10;
+	
+	
+	layer.x2.showlabel=1; layer.x2.label.FORMULA$=x*10^12/$(c)/10^(2); layer.x2.showlabel=1;
+	layer.x2.label.fsize=22; layer.x2.DECPLACES=2;
+	layer.x2.tickthickness=3; layer.x2.mtickthickness=2; layer.x2.label.SUF$=" \p90(\q(cm^{-1}))";
+	layer.x.showopposite=1; layer.x2.ticklength=-6; layer.x2.mticklength=5;
+	gr_set();
+	
+	//////////////////////////////////////////////////
+
+	sln$="W13SP"; lsln$="Emission Spectra Fitting Parameters";
+	if (exist(%(sln$))!=0){win -cwd %(sln$)};
+	win -t l; win -r %H %(sln$); page.longname$=lsln$; page.title=1; 
+	scriptsge$="label -ra SSP; bg=0; fs=27; tabl(SGPT,50,-55,sgpt$,30,10); SGB.script=0; SGB.mouse=0; SSB.script=1; SSB.mouse=1; bg=1; fs=27; anc=1; lat=1; txt(SGPW,24.05,-84.7,sgptfwhm$); anc=1; lat=1; txt(SGPFE,22.2648,-13.1458,sgfiteq$); fs=fs+1; txt(SGPNa,20,-35,Gaussian Profile); @GLOB=1; sgbb=1;";
+	scriptsse$="label -ra SGP; bg=0; fs=27; tabl(SSPT,50,-55,sspt$,30,10); SSB.script=0; SSB.mouse=0; SGB.script=1; SGB.mouse=1; bg=1; fs=27; anc=1; lat=1; txt(SSPW,25.29,-84.64,ssptfwhm$); anc=1; lat=1; txt(SSPFE,23.3781,-12.125,ssfiteq$); fs=fs+1; txt(SSPNa,20,-35,sech\+(2) Profile); @GLOB=1; sgbb=0;";
+	@GLOB=1; sgbb=1; @GLOB=0;
+	
+	scriptfr$="Fr.script=0; Fr.mouse=0; Fr.background=1; Wn.script=1; Wn.mouse=1; Wn.background=3; @GLOB=1; sgpt$=sgpt_f$; sspt$=sspt_f$; sgptfwhm$=sgptfwhm_f$; ssptfwhm$=ssptfwhm_f$; sgfiteq$=sgfiteq_f$; ssfiteq$=ssfiteq_f$; @GLOB=0; if (sgbb==1){SGB.script=1; SGB.run();} else {SSB.script=1; SSB.run()}";
+	scriptwn$="Wn.script=0; Wn.mouse=0; Wn.background=1; Fr.script=1; Fr.mouse=1; Fr.background=3; @GLOB=1; sgpt$=sgpt_n$; sspt$=sspt_n$; sgptfwhm$=sgptfwhm_n$; ssptfwhm$=ssptfwhm_n$; sgfiteq$=sgfiteq_n$; ssfiteq$=ssfiteq_n$; @GLOB=0; if (sgbb==1){SGB.script=1; SGB.run();} else {SSB.script=1; SSB.run()}";
+	
+	scr=1; fs=18; anc=2; txt(Fr,0,-95,In \p80(\q(freq.)) units,scriptfr$);
+	scr=1; fs=18; anc=2; txt(Wn,0,-85,In \p80(\q(cm^{-1})) units,scriptwn$);
+	
+	fs=30; txt(SParams,50,0,Emmision Spectra);
+	params(SGB,scriptsge$,SSB,scriptsse$);
+	
+	//////////////////////////////////////
+
+	ag_r={int(agp.xc-2*agp.w),int(agp.xc+2*agp.w)};
+	if (exist(%(agn$))!=0){win -cwd %(agn$);}
+	win -t plot; win -r %H %(agn$); page.longname$=lagn$; page.title=1;
+	plotxy [%(abn$)]1!((3,8)) ogl:=[%(agn$)]1!; set W21AD_H -k 0; set W21AD_H -l 1; set W21AD_H -wp 3; set W21AD_H -c 2;
+	plotxy [%(abn$)]1!((3,9)) ogl:=[%(agn$)]1!; set W21AD_I -k 0; set W21AD_I -l 1; set W21AD_I -wp 3; set W21AD_I -c 4;
+	plotxy [%(abn$)]1!((3,6)) ogl:=[%(agn$)]1!; set W21AD_F -k 7; set W21AD_F -z 10; set W21AD_F -kh 50; set W21AD_F -l 0;
+	label_layer type:=custom custom:=lagn$ pos:= tco font:=font("Consolas");
+	plabel.TEXT$="\q(Intensity\ Autocorrelation)"; plabel.fsize=30;
+	xb.TEXT$="\q(Time\ Delay\ (\tau)\ /\ fs)"; yl.TEXT$="\q(Normalised\ Intensity\ /\ V)";
+	layer.x.from=ag_r[1]; layer.x.to=ag_r[2];
+	layer.x.firsttick=(ag_r[1]-mod(ag_r[1],25))+25; layer.x.inc=25;
+	gr_set();
+	////////////////////////////////////////////////////
+	aln$="W23AP"; laln$="Intensity Autocorrelation Fitting Parameters";
+	if (exist(%(aln$))!=0){win -cwd %(aln$)}; 
+	win -t l; win -r %H %(aln$); page.longname$=laln$; page.title=1;
+	
+	scriptage$="label -ra ASP; bg=0; fs=27; tabl(AGPT,50,-55,agpt$,30,10); AGB.script=0; AGB.mouse=0; anc=1; lat=1; txt(AGPW,17.3768,-80.58333,agptfwhm$); anc=1; lat=1; txt(AGPFE,20.1151,-13.14583,agfiteq$); ASB.script=1; ASB.mouse=1; txtp();  fs=fs+1; txt(AGPNa,20,-35,Gaussian Profile);";
+	scriptase$="label -ra AGP; bg=0; fs=27; tabl(ASPT,50,-55,aspt$,30,10); ASB.script=0; ASB.mouse=0; anc=1; lat=1; txt(ASPW,19.8464,-81.375,asptfwhm$); anc=1; lat=1; txt(ASPFE,22.098,-12.125,asfiteq$); AGB.script=1; AGB.mouse=1; txtp();  fs=fs+1; txt(ASPNa,20,-35,sech\+(2) Profile);";
+	sel=1; scr=9; fs=30; txt(AParams,50,0,Instensity Autocorrelation);
+	params(AGB,scriptage$,ASB,scriptase$);
+	
+	////////////////////////////////////////////////////
+	
+	win -a %(mln$); lat=1; txt(Res,38,-55,"...");  win -i %(mln$);
+	winarrange order:=2 col:=3;
+	win -a %(sln$); page -f; page.viewpaper=1; femtoicon(); Wn.run();
+	win -a %(sgn$); page -f; gfitp; pfit2l; page -f;
+	win -a %(aln$); page -f; page.viewpaper=1; femtoicon(); AGB.run();
+	win -a %(agn$); page -f; gfitp; pfit2l; page -f;
+	win -a %(mln$); 
+	label -ra L;
+	bg=0; fs=fs+3; txt(L11223344RH,52,-14,\b(\u(Result:)));
+	anc=1; lat=1; txt(Res,8.8617,-29.4166,ktabl$);
+	QT1.text$=\b(Conclusion:) The intensity profile is probably \b(%(pprof$)) like...; QT1.background=1;
+}
+
+
+
+
+
